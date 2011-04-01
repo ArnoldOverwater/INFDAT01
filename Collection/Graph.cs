@@ -7,65 +7,89 @@ namespace Collection.Graph {
 
 	public abstract class Graph<E, V> : IGraph<E, V> {
 
+		#region fields
+
+		public readonly V DefaultValue;
+
+		private List<Edge> edges;
+
+		#endregion
+
+		#region constructor
+
+		public Graph(V defaultValue = default(V)) {
+			this.DefaultValue = defaultValue;
+			this.edges = new List<Edge>();
+		}
+
+		#endregion
+
+		#region implemented methods from interfaces
+
+		#region from IList
+
 		public V GetVertex(int from, int to) {
-			throw new NotImplementedException();
+			Dictionary<int, V> temp = edges[from].vertices;
+			if (temp.ContainsKey(to))
+				return temp[to];
+			else
+				return DefaultValue;
 		}
 
 		public V[] GetVerticesFrom(int index) {
-			throw new NotImplementedException();
+			V[] vertices = new V[edges.Count];
+			for (int i = 0; i < vertices.Length; i++)
+				vertices[i] = GetVertex(from: index, to: i);
+			return vertices;
 		}
 
 		public V[] GetVerticesTo(int index) {
-			throw new NotImplementedException();
+			V[] vertices = new V[edges.Count];
+			for (int i = 0; i < vertices.Length; i++)
+				vertices[i] = GetVertex(from: i, to: index);
+			return vertices;
 		}
 
-		public int IndexOf(E item) {
-			throw new NotImplementedException();
-		}
+		#endregion
 
-		public void Insert(int index, E item) {
-			throw new NotImplementedException();
-		}
-
-		public void RemoveAt(int index) {
-			throw new NotImplementedException();
-		}
+		#region from other
 
 		public E this[int index] {
 			get {
-				throw new NotImplementedException();
+				return edges[index].value;
 			}
 			set {
-				throw new NotImplementedException();
+				RemoveAt(index);
+				Insert(index, value);
 			}
-		}
-
-		public void Add(E item) {
-			throw new NotImplementedException();
-		}
-
-		public void Clear() {
-			throw new NotImplementedException();
-		}
-
-		public bool Contains(E item) {
-			throw new NotImplementedException();
-		}
-
-		public void CopyTo(E[] array, int arrayIndex) {
-			throw new NotImplementedException();
 		}
 
 		public int Count {
-			get { throw new NotImplementedException(); }
+			get {
+				return edges.Count;
+			}
 		}
 
 		public bool IsReadOnly {
-			get { throw new NotImplementedException(); }
+			get {
+				return false;
+			}
 		}
 
-		public bool Remove(E item) {
-			throw new NotImplementedException();
+		public int IndexOf(E item) {
+			for (int i = 0; i < edges.Count; i++)
+				if (edges[i].value.Equals(item))
+					return i;
+			return -1;
+		}
+
+		public bool Contains(E item) {
+			return IndexOf(item) >= 0;
+		}
+
+		public void CopyTo(E[] array, int arrayIndex = 0) {
+			foreach (Edge edge in edges)
+				array[arrayIndex++] = edge.value;
 		}
 
 		public IEnumerator<E> GetEnumerator() {
@@ -73,8 +97,51 @@ namespace Collection.Graph {
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-			throw new NotImplementedException();
+			return GetEnumerator();
 		}
+
+		public void Add(E item) {
+			Insert(edges.Count, item);
+		}
+
+		public void Clear() {
+			edges.Clear();
+		}
+
+		public bool Remove(E item) {
+			int temp = IndexOf(item);
+			if (temp >= 0) {
+				RemoveAt(temp);
+				return true;
+			} else
+				return false;
+		}
+
+		public abstract void Insert(int index, E item);
+
+		public abstract void RemoveAt(int index);
+
+		#endregion
+
+		#endregion
+
+		#region inner class
+
+		internal struct Edge {
+
+			public readonly E value;
+
+			public readonly Dictionary<int, V> vertices;
+
+			internal Edge(E value) {
+				this.value = value;
+				this.vertices = new Dictionary<int, V>();
+			}
+
+		}
+
+		#endregion
+
 	}
 
 }
