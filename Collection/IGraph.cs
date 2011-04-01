@@ -7,11 +7,11 @@ namespace Collection.Graph {
 
 	interface IGraph<E, V> : IList<E> {
 
-		public V GetVertex(int from, int to);
+		V GetVertex(int from, int to);
 
-		public V[] GetVerticesFrom(int index);
+		V[] GetVerticesFrom(int index);
 
-		public V[] GetVerticesTo(int index);
+		V[] GetVerticesTo(int index);
 
 	}
 
