@@ -16,6 +16,13 @@ namespace Collection.Graph {
 				return DefaultValue;
 		}
 
+		public override void SetVertex(int from, int to, V vertex) {
+			Dictionary<int, V> dictionary = edges[from].vertices;
+			if (dictionary.ContainsKey(to))
+				dictionary.Remove(to);
+			dictionary.Add(to, vertex);
+		}
+
 		public override void RemoveAt(int index) {
 			edges.RemoveAt(index);
 			foreach (Edge edge in edges) {
