@@ -21,6 +21,18 @@ namespace Collection.Graph {
 				return DefaultValue;
 		}
 
+		public override void SetVertex(int from, int to, V vertex) {
+			if (from < to) {
+				int temp = to;
+				to = from;
+				from = temp;
+			}
+			Dictionary<int, V> dictionary = edges[from].vertices;
+			if (dictionary.ContainsKey(to))
+				dictionary.Remove(to);
+			dictionary.Add(to, vertex);
+		}
+
 		public override void RemoveAt(int index) {
 			edges.RemoveAt(index);
 			for (int i = index; i < edges.Count; i++)
