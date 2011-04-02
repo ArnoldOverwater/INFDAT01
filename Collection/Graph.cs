@@ -26,15 +26,9 @@ namespace Collection.Graph {
 
 		#region implemented methods from interfaces
 
-		#region from IList
+		#region from IGraph
 
-		public V GetVertex(int from, int to) {
-			Dictionary<int, V> temp = edges[from].vertices;
-			if (temp.ContainsKey(to))
-				return temp[to];
-			else
-				return DefaultValue;
-		}
+		public abstract V GetVertex(int from, int to);
 
 		public V[] GetVerticesFrom(int index) {
 			V[] vertices = new V[edges.Count];
@@ -93,11 +87,15 @@ namespace Collection.Graph {
 		}
 
 		public IEnumerator<E> GetEnumerator() {
-			throw new NotImplementedException();
+			return new Enumerator(edges.GetEnumerator());
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 			return GetEnumerator();
+		}
+
+		public void Insert(int index, E item) {
+			edges.Insert(index, new Edge(item));
 		}
 
 		public void Add(E item) {
@@ -117,15 +115,13 @@ namespace Collection.Graph {
 				return false;
 		}
 
-		public abstract void Insert(int index, E item);
-
 		public abstract void RemoveAt(int index);
 
 		#endregion
 
 		#endregion
 
-		#region inner class
+		#region inner classes
 
 		internal struct Edge {
 
@@ -136,6 +132,40 @@ namespace Collection.Graph {
 			internal Edge(E value) {
 				this.value = value;
 				this.vertices = new Dictionary<int, V>();
+			}
+
+		}
+
+		public struct Enumerator : IEnumerator<E> {
+
+			IEnumerator<Edge> enumerator;
+
+			internal Enumerator(IEnumerator<Edge> enumerator) {
+				this.enumerator = enumerator;
+			}
+
+			public E Current {
+				get {
+					return enumerator.Current.value;
+				}
+			}
+
+			public void Dispose() {
+				enumerator.Dispose();
+			}
+
+			object System.Collections.IEnumerator.Current {
+				get {
+					return Current;
+				}
+			}
+
+			public bool MoveNext() {
+				return enumerator.MoveNext();
+			}
+
+			public void Reset() {
+				enumerator.Reset();
 			}
 
 		}
