@@ -11,7 +11,7 @@ namespace Collection.Graph {
 
 		public readonly V DefaultValue;
 
-		private List<Edge> edges;
+		protected List<Edge> edges;
 
 		#endregion
 
