@@ -121,6 +121,22 @@ namespace Collection.Graph {
 
 		#endregion
 
+		#region modify methods
+
+		public abstract void SetVertex(int from, int to, V vertex);
+
+		public void SetVerticesFrom(int index, V[] vertices, int arrayIndex = 0) {
+			for (int i = 0; i < edges.Count; i++)
+				SetVertex(from: index, to: i, vertex: vertices[arrayIndex++]);
+		}
+
+		public void SetVerticesTo(int index, V[] vertices, int arrayIndex = 0) {
+			for (int i = 0; i < edges.Count; i++)
+				SetVertex(from: i, to: index, vertex: vertices[arrayIndex++]);
+		}
+
+		#endregion
+
 		#region inner classes
 
 		internal struct Edge {
