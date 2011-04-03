@@ -8,6 +8,14 @@ namespace Collection.Graph {
 
 	class DirectionalGraph<E, V> : Graph<E, V> {
 
+		#region constructor
+
+		public DirectionalGraph(V defaultValue = default(V)) : base(defaultValue) {}
+
+		#endregion
+
+		#region methods
+
 		public override V GetVertex(int from, int to) {
 			Dictionary<int, V> dictionary = edges[from].vertices;
 			if (dictionary.ContainsKey(to))
@@ -37,6 +45,8 @@ namespace Collection.Graph {
 				}
 			}
 		}
+
+		#endregion
 
 	}
 
