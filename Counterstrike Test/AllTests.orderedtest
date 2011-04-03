@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OrderedTest name="OrderedTest" storage="c:\users\arnold\documents\visual studio 2010\projects\data structures\counterstrike\counterstrike test\orderedtest.orderedtest" id="90de2a93-874b-4224-94eb-2f08504927d2" continueAfterFailure="true" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestLinks>
+    <TestLink id="45aae3b8-1ee8-3cfb-ff6f-0fd16aa0122f" name="TestMethod1" storage="bin\release\counterstrike test.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="435dc13f-3d20-d6cf-ac2e-8e8c51266b2e" name="TestMethod1" storage="bin\release\counterstrike test.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestLinks>
+</OrderedTest>
