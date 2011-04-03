@@ -8,6 +8,14 @@ namespace Collection.Graph {
 
 	class UndirectionalGraph<E, V> : Graph<E, V> {
 
+		#region constructor
+
+		public UndirectionalGraph(V defaultValue = default(V)) : base(defaultValue) {}
+
+		#endregion
+
+		#region methods
+
 		public override V GetVertex(int from, int to) {
 			if (from < to) {
 				int temp = to;
@@ -48,6 +56,8 @@ namespace Collection.Graph {
 				}
 			}
 		}
+
+		#endregion
 
 	}
 
