@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Collection.Graph {
 
-	class DirectionalGraph<E, V> : Graph<E, V> {
+	public class DirectionalGraph<E, V> : Graph<E, V> {
 
 		#region constructor
 
