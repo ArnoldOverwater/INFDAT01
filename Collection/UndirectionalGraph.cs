@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Collection.Graph {
 
-	class UndirectionalGraph<E, V> : Graph<E, V> {
+	public class UndirectionalGraph<E, V> : Graph<E, V> {
 
 		#region constructor
 
