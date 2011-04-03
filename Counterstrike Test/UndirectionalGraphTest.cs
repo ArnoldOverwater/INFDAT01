@@ -41,7 +41,7 @@ namespace Counterstrike_Test {
 		// Use ClassInitialize to run code before running the first test in the class
 		[ClassInitialize()]
 		public static void MyClassInitialize(TestContext testContext) {
-			graph = new UndirectionalGraph<UInt16, Single>(1.0);
+			graph = new UndirectionalGraph<UInt16, Single>(1.0f);
 		}
 		//
 		// Use ClassCleanup to run code after all tests in a class have run
