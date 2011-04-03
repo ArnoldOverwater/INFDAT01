@@ -69,5 +69,49 @@ namespace Counterstrike_Test {
 		public void TestMethod1() {
 			Assert.AreEqual(graph.Count, 2);
 		}
+
+		[TestMethod]
+		public void TestMethod2() {
+			graph.Remove(2);
+			Assert.AreEqual(graph.Count, 1);
+		}
+
+		[TestMethod]
+		public void TestMethod3() {
+			graph.Add(16);
+			Assert.AreEqual(graph.Count, 3);
+			Assert.AreEqual(graph.IndexOf(2), 1);
+			Assert.AreEqual(graph[2], 16);
+		}
+
+		[TestMethod]
+		public void TestMethod4() {
+			Assert.IsTrue(graph.IndexOf(3) < 0);
+			Assert.IsFalse(graph.Contains(3));
+			try {
+				graph[5].ToString();
+				Assert.Fail();
+			} catch (Exception e) {
+				Assert.IsNotInstanceOfType(e, typeof(AssertFailedException));
+			}
+		}
+
+		[TestMethod]
+		public void TestMethod5() {
+			graph.Add(4);
+			graph.Add(8);
+			graph.Add(16);
+			graph.Add(32);
+			graph.Add(64);
+			graph.Add(128);
+			graph.Add(256);
+			Assert.AreEqual(graph.GetVertex(2, 5), 1.0f);
+			graph.SetVertex(2, 5, 0.5f);
+			Assert.AreEqual(graph.GetVertex(2, 5), 0.5f);
+			Assert.AreEqual(graph.GetVertex(5, 2), 0.5f);
+			graph.RemoveAt(2);
+			Assert.AreEqual(graph.GetVertex(2, 5), 1.0f);
+		}
+
 	}
 }
