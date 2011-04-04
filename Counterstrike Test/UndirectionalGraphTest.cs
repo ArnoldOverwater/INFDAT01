@@ -111,6 +111,24 @@ namespace Counterstrike_Test {
 			Assert.AreEqual(graph.GetVertex(5, 2), 0.5f);
 			graph.RemoveAt(2);
 			Assert.AreEqual(graph.GetVertex(2, 5), 1.0f);
+			Assert.AreEqual(graph.GetVertex(5, 2), 1.0f);
+		}
+
+		[TestMethod]
+		public void TestMethod6() {
+			graph.Add(4);
+			graph.Add(8);
+			graph.Add(16);
+			graph.Add(32);
+			graph.Add(64);
+			graph.Add(128);
+			graph.Add(256);
+			graph.SetVertex(2, 5, 0.5f);
+			graph.SetVertex(4, 5, 2.0f);
+			graph.RemoveAt(2);
+			Assert.AreEqual(graph.GetVertex(2, 4), 1.0f);
+			Assert.AreEqual(graph.GetVertex(3, 4), 2.0f);
+			Assert.AreEqual(graph.GetVertex(4, 3), 2.0f);
 		}
 
 	}
