@@ -143,11 +143,11 @@ namespace Collection.Graph {
 
 			public readonly E value;
 
-			public readonly Dictionary<E, V> vertices;
+			public readonly Dictionary<Edge, V> vertices;
 
 			internal Edge(E value) {
 				this.value = value;
-				this.vertices = new Dictionary<E, V>();
+				this.vertices = new Dictionary<Edge, V>();
 			}
 
 			~Edge() {
