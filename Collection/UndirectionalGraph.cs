@@ -22,9 +22,10 @@ namespace Collection.Graph {
 				to = from;
 				from = temp;
 			}
-			Dictionary<int, V> dictionary = edges[from].vertices;
-			if (dictionary.ContainsKey(to))
-				return dictionary[to];
+			Dictionary<Edge, V> dictionary = edges[from].vertices;
+			Edge edge = edges[to];
+			if (dictionary.ContainsKey(edge))
+				return dictionary[edge];
 			else
 				return DefaultValue;
 		}
@@ -35,26 +36,18 @@ namespace Collection.Graph {
 				to = from;
 				from = temp;
 			}
-			Dictionary<int, V> dictionary = edges[from].vertices;
-			if (dictionary.ContainsKey(to))
-				dictionary.Remove(to);
-			dictionary.Add(to, vertex);
+			Dictionary<Edge, V> dictionary = edges[from].vertices;
+			Edge edge = edges[to];
+			if (dictionary.ContainsKey(edge))
+				dictionary.Remove(edge);
+			dictionary.Add(edge, vertex);
 		}
 
 		public override void RemoveAt(int index) {
+			Edge edge = edges[index];
 			edges.RemoveAt(index);
 			for (int i = index; i < edges.Count; i++)
-				edges[i].vertices.Remove(index);
-			foreach (Edge edge in edges) {
-				Dictionary<int, V> dictionary = edge.vertices;
-				var indices = from i in dictionary.Keys
-					where i > index
-					select new {oldIndex = i, newIndex = i - 1, element = dictionary[i]};
-				foreach (var v in indices) {
-					dictionary.Remove(v.oldIndex);
-					dictionary.Add(v.newIndex, v.element);
-				}
-			}
+				edges[i].vertices.Remove(edge);
 		}
 
 		#endregion
