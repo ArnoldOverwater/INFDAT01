@@ -139,15 +139,19 @@ namespace Collection.Graph {
 
 		#region inner classes
 
-		internal struct Edge {
+		internal class Edge {
 
 			public readonly E value;
 
-			public readonly Dictionary<int, V> vertices;
+			public readonly Dictionary<E, V> vertices;
 
 			internal Edge(E value) {
 				this.value = value;
-				this.vertices = new Dictionary<int, V>();
+				this.vertices = new Dictionary<E, V>();
+			}
+
+			~Edge() {
+				vertices.Clear();
 			}
 
 		}
