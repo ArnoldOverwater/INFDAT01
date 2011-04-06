@@ -44,6 +44,18 @@ namespace Collection.Graph {
 			return vertices;
 		}
 
+		public V GetVertexWithEdge(E from, E to) {
+			return GetVertex(IndexOf(from), IndexOf(to));
+		}
+
+		public V[] GetVerticesFromEdge(E edge) {
+			return GetVerticesFrom(IndexOf(edge));
+		}
+
+		public V[] GetVerticesToEdge(E edge) {
+			return GetVerticesTo(IndexOf(edge));
+		}
+
 		#endregion
 
 		#region from other

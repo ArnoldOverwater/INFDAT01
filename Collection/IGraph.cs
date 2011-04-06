@@ -13,6 +13,12 @@ namespace Collection.Graph {
 
 		V[] GetVerticesTo(int index);
 
+		V GetVertexWithEdge(E from, E to);
+
+		V[] GetVerticesFromEdge(E edge);
+
+		V[] GetVerticesToEdge(E edge);
+
 	}
 
 }
