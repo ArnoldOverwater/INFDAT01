@@ -68,6 +68,8 @@ namespace Counterstrike_Test {
 		[TestMethod]
 		public void TestMethod1() {
 			Assert.AreEqual(graph.Count, 2);
+			Assert.IsFalse(graph.Remove(4));
+			Assert.IsFalse(graph.IsReadOnly);
 		}
 
 		[TestMethod]
@@ -123,10 +125,26 @@ namespace Counterstrike_Test {
 			graph.Add(128);
 			graph.Add(256);
 			graph.SetVertex(2, 5, 0.5f);
+			graph.SetVertex(4, 5, 0.5f);
 			graph.SetVertex(4, 5, 2.0f);
 			graph.RemoveAt(2);
 			Assert.AreEqual(graph.GetVertex(2, 4), 1.0f);
 			Assert.AreEqual(graph.GetVertex(3, 4), 2.0f);
+		}
+
+		[TestMethod]
+		public void TestMethod7() {
+			graph.Add(4);
+			graph.Add(8);
+			graph.Add(16);
+			graph.Add(32);
+			graph.Add(64);
+			graph.Add(128);
+			graph.Add(256);
+			foreach (int i in graph)
+				i.ToString();
+			graph.GetEnumerator().Reset();
+			graph.CopyTo(new UInt16[graph.Count]);
 		}
 
 	}
