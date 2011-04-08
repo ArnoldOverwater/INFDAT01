@@ -39,7 +39,7 @@ namespace Collection.Graph {
 			if (dictionary.ContainsKey(edgeTo))
 				dictionary.Remove(edgeTo);
 			dictionary.Add(edgeTo, vertex);
-			rwLock.ExitWriteLock();
+			edgeFrom.rwLock.ExitWriteLock();
 			rwLock.ExitReadLock();
 		}
 

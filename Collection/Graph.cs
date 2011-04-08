@@ -136,7 +136,9 @@ namespace Collection.Graph {
 		}
 
 		public void Add(E item) {
+			rwLock.EnterUpgradeableReadLock();
 			Insert(edges.Count, item);
+			rwLock.ExitUpgradeableReadLock();
 		}
 
 		public void Clear() {
@@ -195,7 +197,7 @@ namespace Collection.Graph {
 			internal Edge(E value) {
 				this.value = value;
 				this.vertices = new Dictionary<Edge, V>();
-				this.rwLock = new ReaderWriterLockSlim();
+				this.rwLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			}
 
 			~Edge() {
