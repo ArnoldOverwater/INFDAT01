@@ -44,6 +44,20 @@ namespace Counterstrike {
 
 		#endregion
 
+		#region constructors
+
+		public Player(string screenName = "Player") : this(screenName, new IPAddress(0x7f000001)) {}
+
+		public Player(string screenName, IPAddress ipAddress) {
+			this.IPAddress = ipAddress;
+			this.ScreenName = screenName;
+			this.totalKills = 0;
+			this.totalKilled = 0;
+			this.score = 0;
+		}
+
+		#endregion
+
 	}
 
 }
