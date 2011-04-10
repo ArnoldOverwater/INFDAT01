@@ -55,6 +55,7 @@
     <Compile Include="Collection\Graph.cs" />
     <Compile Include="Collection\IGraph.cs" />
     <Compile Include="Collection\UndirectionalGraph.cs" />
+    <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
