@@ -1,7 +1,6 @@
 ﻿// Arnold Overwater - 0821508 - INF2A
 
 using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace Counterstrike {
@@ -14,6 +13,8 @@ namespace Counterstrike {
 
 		public IPAddress IPAddress;
 
+		private ulong matches;
+
 		private ulong totalKills;
 
 		private ulong totalKilled;
@@ -23,6 +24,12 @@ namespace Counterstrike {
 		#endregion
 
 		#region properties
+
+		public ulong Matches {
+			get {
+				return matches;
+			}
+		}
 
 		public ulong TotalKills {
 			get {
@@ -54,6 +61,26 @@ namespace Counterstrike {
 			this.totalKills = 0;
 			this.totalKilled = 0;
 			this.score = 0;
+		}
+
+		#endregion
+
+		#region incrementing methods
+
+		internal void IncrementMatches() {
+			matches++;
+		}
+
+		internal void IncrementKills() {
+			totalKills++;
+		}
+
+		internal void IncrementKilled() {
+			totalKilled++;
+		}
+
+		internal void IncreaseScore(double score) {
+			this.score += score;
 		}
 
 		#endregion
