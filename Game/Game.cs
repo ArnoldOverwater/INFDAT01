@@ -7,7 +7,7 @@ using Collection.Graph;
 
 namespace Counterstrike {
 
-	class Game : DirectionalGraph<Player, ushort> {
+	public class Game : DirectionalGraph<Player, ushort> {
 
 	}
 
