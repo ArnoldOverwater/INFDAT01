@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Counterstrike {
 
-	class Player {
+	public class Player {
 
 		#region fields
 
