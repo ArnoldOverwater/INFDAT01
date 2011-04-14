@@ -1,7 +1,5 @@
 ﻿// Arnold Overwater - 0821508 - INF2A
 
-// Arnold Overwater - 0821508 - INF2A
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +18,12 @@ namespace Counterstrike {
 		#region methods
 
 		public void AddPlayer(Player player) {
-			Add(player);
-			player.IncrementMatches();
+			if (player == null)
+				throw new NullReferenceException();
+			if (! Contains(player)) {
+				Add(player);
+				player.IncrementMatches();
+			}
 		}
 
 		#endregion
