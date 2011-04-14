@@ -61,7 +61,19 @@ namespace Counterstrike_Test {
 
 		[TestMethod()]
 		public void TestMethod1() {
-			
+			game.AddPlayer(new Player());
+			Assert.AreEqual(game.Count, 3);
+		}
+
+		[TestMethod()]
+		public void TestMethod2() {
+			game.KillPlayerIndex(killer: 0, victim: 1);
+			Assert.AreEqual(game.GetVertex(from: 0, to: 1), 1);
+			Assert.AreEqual(game.GetVertex(from: 1, to: 0), 0);
+			Assert.AreEqual(game[0].TotalKills, 1ul);
+			Assert.AreEqual(game[1].TotalKills, 0ul);
+			Assert.AreEqual(game[0].TotalKilled, 0ul);
+			Assert.AreEqual(game[1].TotalKilled, 1ul);
 		}
 
 	}
