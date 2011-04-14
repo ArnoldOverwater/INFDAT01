@@ -76,6 +76,16 @@ namespace Counterstrike_Test {
 			Assert.AreEqual(game[1].TotalKilled, 1ul);
 		}
 
+		[TestMethod()]
+		public void TestMethod() {
+			try {
+				game.AddPlayer(null);
+				Assert.Fail();
+			} catch (NullReferenceException) {
+				Assert.AreEqual(game.Count, 2);
+			}
+		}
+
 	}
 
 }
