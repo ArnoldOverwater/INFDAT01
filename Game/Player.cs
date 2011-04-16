@@ -141,6 +141,14 @@ namespace Counterstrike {
 
 		#endregion
 
+		#region methods from object class
+
+		public override string ToString() {
+			return ScreenName + " (" + matchScore + ")";
+		}
+
+		#endregion
+
 	}
 
 }
