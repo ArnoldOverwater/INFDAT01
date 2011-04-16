@@ -55,8 +55,10 @@ namespace Counterstrike {
 			SetVertex(killer, victim, kills);
 			this[killer].IncrementKills();
 			this[victim].IncrementKilled();
-			this[victim].MatchScore -= this[victim].MatchScore / Count;
-			this[killer].MatchScore += this[victim].MatchScore / Count;
+			if (killer == victim)
+				this[victim].MatchScore -= this[victim].MatchScore / Count;
+			else
+				this[killer].MatchScore += this[victim].MatchScore / Count;
 		}
 
 		public void KillPlayerIndex(int suicider) {
