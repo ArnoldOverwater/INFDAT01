@@ -21,9 +21,9 @@ namespace Counterstrike {
 
 		#region fields for current match
 
-		private ulong matchKills;
+		private ushort matchKills;
 
-		private ulong matchKilled;
+		private ushort matchKilled;
 
 		private double matchScore;
 
@@ -55,13 +55,13 @@ namespace Counterstrike {
 
 		#region properties for current match
 
-		public ulong MatchKills {
+		public ushort MatchKills {
 			get {
 				return matchKills;
 			}
 		}
 
-		public ulong MatchKilled {
+		public ushort MatchKilled {
 			get {
 				return matchKilled;
 			}
@@ -120,6 +120,9 @@ namespace Counterstrike {
 
 		internal void EnterMatch() {
 			matches++;
+			matchKills = 0;
+			matchKilled = 0;
+			matchScore = 1.0;
 		}
 
 		internal void IncrementKills() {
