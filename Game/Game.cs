@@ -26,6 +26,20 @@ namespace Counterstrike {
 			}
 		}
 
+		public void RemovePlayerIndex(int index) {
+			this[index].IncreaseScore(0);
+			RemoveAt(index);
+		}
+
+		public bool RemovePlayer(Player player) {
+			try {
+				RemovePlayerIndex(IndexOf(player));
+				return true;
+			} catch (Exception) {
+				return false;
+			}
+		}
+
 		#endregion
 
 		#region kill methods
