@@ -22,12 +22,12 @@ namespace Counterstrike {
 				throw new NullReferenceException();
 			if (! Contains(player)) {
 				Add(player);
-				player.IncrementMatches();
+				player.EnterMatch();
 			}
 		}
 
 		public void RemovePlayerIndex(int index) {
-			this[index].IncreaseScore(0);
+			this[index].EndMatch();
 			RemoveAt(index);
 		}
 
