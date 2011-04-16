@@ -70,20 +70,34 @@ namespace Counterstrike_Test {
 			game.KillPlayerIndex(killer: 0, victim: 1);
 			Assert.AreEqual(game.GetVertex(from: 0, to: 1), 1);
 			Assert.AreEqual(game.GetVertex(from: 1, to: 0), 0);
-			Assert.AreEqual(game[0].TotalKills, 1ul);
-			Assert.AreEqual(game[1].TotalKills, 0ul);
-			Assert.AreEqual(game[0].TotalKilled, 0ul);
-			Assert.AreEqual(game[1].TotalKilled, 1ul);
+			Assert.AreEqual(game[0].MatchKills, 1);
+			Assert.AreEqual(game[1].MatchKills, 0);
+			Assert.AreEqual(game[0].MatchKilled, 0);
+			Assert.AreEqual(game[1].MatchKilled, 1);
 		}
 
 		[TestMethod()]
-		public void TestMethod() {
+		public void TestMethod3() {
 			try {
 				game.AddPlayer(null);
 				Assert.Fail();
 			} catch (NullReferenceException) {
 				Assert.AreEqual(game.Count, 2);
 			}
+		}
+
+		[TestMethod()]
+		public void TestMethod4() {
+			game.KillPlayerIndex(killer: 0, victim: 1);
+			game.KillPlayerIndex(killer: 1, victim: 0);
+			game.KillPlayerIndex(suicider: 0);
+			Player[] array = new Player[2];
+			game.CopyTo(array);
+			game.EndGame();
+			Assert.AreEqual(array[0].TotalKills, 2ul);
+			Assert.AreEqual(array[1].TotalKills, 1ul);
+			Assert.AreEqual(array[0].TotalKilled, 2ul);
+			Assert.AreEqual(array[1].TotalKilled, 1ul);
 		}
 
 	}
