@@ -40,6 +40,11 @@ namespace Counterstrike {
 			}
 		}
 
+		public void EndGame() {
+			for (int i = Count - 1; i >= 0; i--)
+				RemovePlayerIndex(i);
+		}
+
 		#endregion
 
 		#region kill methods
@@ -50,6 +55,8 @@ namespace Counterstrike {
 			SetVertex(killer, victim, kills);
 			this[killer].IncrementKills();
 			this[victim].IncrementKilled();
+			this[victim].MatchScore -= this[victim].MatchScore * Count;
+			this[killer].MatchScore += this[killer].MatchScore * Count;
 		}
 
 		public void KillPlayerIndex(int suicider) {
