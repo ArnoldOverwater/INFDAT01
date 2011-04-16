@@ -26,6 +26,7 @@ class App {
 		game.KillPlayerIndex(killer: 1, victim: 2);
 		for (byte i = 0; i < 12; i++)
 			game.KillPlayerIndex(killer: 0, victim: 1);
+		game.KillPlayerIndex(killer: 2, victim: 0);
 		PrintGame(game);
 	}
 
@@ -39,6 +40,7 @@ class App {
 		game.KillPlayerIndex(killer: 1, victim: 2);
 		for (byte i = 0; i < 6; i++)
 			game.KillPlayerIndex(killer: 0, victim: 1);
+		game.KillPlayerIndex(killer: 2, victim: 0);
 		PrintGame(game);
 	}
 
@@ -50,6 +52,7 @@ class App {
 		for (byte i = 0; i < 12; i++)
 			game.KillPlayerIndex(killer: 0, victim: 1);
 		game.KillPlayerIndex(killer: 1, victim: 2);
+		game.KillPlayerIndex(killer: 2, victim: 0);
 		PrintGame(game);
 	}
 
