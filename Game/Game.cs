@@ -49,20 +49,24 @@ namespace Counterstrike {
 
 		#region kill methods
 
-		public void KillPlayerIndex(int killer, int victim) {
-			ushort kills = GetVertex(killer, victim);
+		public void KillPlayerIndex(int killerIndex, int victimIndex) {
+			ushort kills = GetVertex(killerIndex, victimIndex);
 			kills++;
-			SetVertex(killer, victim, kills);
-			this[killer].IncrementKills();
-			this[victim].IncrementKilled();
-			if (killer == victim)
-				this[victim].MatchScore -= this[victim].MatchScore / Count;
-			else
-				this[killer].MatchScore += this[victim].MatchScore / Count;
+			SetVertex(killerIndex, victimIndex, kills);
+			Player killer = this[killerIndex], victim = this[victimIndex];
+			killer.IncrementKills();
+			victim.IncrementKilled();
+			if (killerIndex == victimIndex)
+				victim.MatchScore -= victim.MatchScore / Count;
+			else {
+				if (victim.MatchScore > killer.MatchScore)
+					victim.MatchScore -= (victim.MatchScore - killer.MatchScore) / Count;
+				killer.MatchScore += victim.MatchScore / Count;
+			}
 		}
 
 		public void KillPlayerIndex(int suicider) {
-			KillPlayerIndex(killer: suicider, victim: suicider);
+			KillPlayerIndex(killerIndex: suicider, victimIndex: suicider);
 		}
 
 		public void KillPlayer(Player killer, Player victim) {
