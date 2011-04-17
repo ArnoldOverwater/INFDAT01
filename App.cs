@@ -23,10 +23,10 @@ class App {
 		game.AddPlayer(new Player("P1"));
 		game.AddPlayer(new Player("P2"));
 		game.AddPlayer(new Player("P3"));
-		game.KillPlayerIndex(killer: 1, victim: 2);
+		game.KillPlayerIndex(killerIndex: 1, victimIndex: 2);
 		for (byte i = 0; i < 12; i++)
-			game.KillPlayerIndex(killer: 0, victim: 1);
-		game.KillPlayerIndex(killer: 2, victim: 0);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
+		game.KillPlayerIndex(killerIndex: 2, victimIndex: 0);
 		PrintGame(game);
 	}
 
@@ -36,11 +36,11 @@ class App {
 		game.AddPlayer(new Player("P2"));
 		game.AddPlayer(new Player("P3"));
 		for (byte i = 0; i < 6; i++)
-			game.KillPlayerIndex(killer: 0, victim: 1);
-		game.KillPlayerIndex(killer: 1, victim: 2);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
+		game.KillPlayerIndex(killerIndex: 1, victimIndex: 2);
 		for (byte i = 0; i < 6; i++)
-			game.KillPlayerIndex(killer: 0, victim: 1);
-		game.KillPlayerIndex(killer: 2, victim: 0);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
+		game.KillPlayerIndex(killerIndex: 2, victimIndex: 0);
 		PrintGame(game);
 	}
 
@@ -50,9 +50,9 @@ class App {
 		game.AddPlayer(new Player("P2"));
 		game.AddPlayer(new Player("P3"));
 		for (byte i = 0; i < 12; i++)
-			game.KillPlayerIndex(killer: 0, victim: 1);
-		game.KillPlayerIndex(killer: 1, victim: 2);
-		game.KillPlayerIndex(killer: 2, victim: 0);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
+		game.KillPlayerIndex(killerIndex: 1, victimIndex: 2);
+		game.KillPlayerIndex(killerIndex: 2, victimIndex: 0);
 		PrintGame(game);
 	}
 
