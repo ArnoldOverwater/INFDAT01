@@ -17,37 +17,68 @@ namespace Collection.Graph {
 		#region methods
 
 		public override V GetVertex(int from, int to) {
-			if (from < to) {
-				int temp = to;
-				to = from;
-				from = temp;
+			V vertex;
+			rwLock.EnterReadLock();
+			Edge edgeFrom, edgeTo;
+			try {
+				if (from < to) {
+					edgeFrom = edges[to];
+					edgeTo = edges[from];
+				} else {
+					edgeFrom = edges[from];
+					edgeTo = edges[to];
+				}
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
 			}
-			Dictionary<Edge, V> dictionary = edges[from].vertices;
-			Edge edge = edges[to];
-			if (dictionary.ContainsKey(edge))
-				return dictionary[edge];
+			edgeFrom.rwLock.EnterReadLock();
+			Dictionary<Edge, V> dictionary = edgeFrom.vertices;
+			if (dictionary.ContainsKey(edgeTo))
+				vertex = dictionary[edgeTo];
 			else
-				return DefaultValue;
+				vertex = DefaultValue;
+			edgeFrom.rwLock.ExitReadLock();
+			rwLock.ExitReadLock();
+			return vertex;
 		}
 
 		public override void SetVertex(int from, int to, V vertex) {
-			if (from < to) {
-				int temp = to;
-				to = from;
-				from = temp;
+			rwLock.EnterReadLock();
+			Edge edgeFrom, edgeTo;
+			try {
+				if (from < to) {
+					edgeFrom = edges[to];
+					edgeTo = edges[from];
+				} else {
+					edgeFrom = edges[from];
+					edgeTo = edges[to];
+				}
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
 			}
-			Dictionary<Edge, V> dictionary = edges[from].vertices;
-			Edge edge = edges[to];
-			if (dictionary.ContainsKey(edge))
-				dictionary.Remove(edge);
-			dictionary.Add(edge, vertex);
+			edgeFrom.rwLock.EnterWriteLock();
+			Dictionary<Edge, V> dictionary = edgeFrom.vertices;
+			if (dictionary.ContainsKey(edgeTo))
+				dictionary.Remove(edgeTo);
+			dictionary.Add(edgeTo, vertex);
+			edgeFrom.rwLock.ExitWriteLock();
+			rwLock.ExitReadLock();
 		}
 
 		public override void RemoveAt(int index) {
-			Edge edge = edges[index];
-			edges.RemoveAt(index);
-			for (int i = index; i < edges.Count; i++)
-				edges[i].vertices.Remove(edge);
+			rwLock.EnterWriteLock();
+			try {
+				Edge edge = edges[index];
+				edges.RemoveAt(index);
+				for (int i = index; i < edges.Count; i++)
+					edges[i].vertices.Remove(edge);
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
+			rwLock.ExitWriteLock();
 		}
 
 		#endregion
