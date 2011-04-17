@@ -20,12 +20,17 @@ namespace Collection.Graph {
 			V vertex;
 			rwLock.EnterReadLock();
 			Edge edgeFrom, edgeTo;
-			if (from < to) {
-				edgeFrom = edges[to];
-				edgeTo = edges[from];
-			} else {
-				edgeFrom = edges[from];
-				edgeTo = edges[to];
+			try {
+				if (from < to) {
+					edgeFrom = edges[to];
+					edgeTo = edges[from];
+				} else {
+					edgeFrom = edges[from];
+					edgeTo = edges[to];
+				}
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
 			}
 			edgeFrom.rwLock.EnterReadLock();
 			Dictionary<Edge, V> dictionary = edgeFrom.vertices;
@@ -41,12 +46,17 @@ namespace Collection.Graph {
 		public override void SetVertex(int from, int to, V vertex) {
 			rwLock.EnterReadLock();
 			Edge edgeFrom, edgeTo;
-			if (from < to) {
-				edgeFrom = edges[to];
-				edgeTo = edges[from];
-			} else {
-				edgeFrom = edges[from];
-				edgeTo = edges[to];
+			try {
+				if (from < to) {
+					edgeFrom = edges[to];
+					edgeTo = edges[from];
+				} else {
+					edgeFrom = edges[from];
+					edgeTo = edges[to];
+				}
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
 			}
 			edgeFrom.rwLock.EnterWriteLock();
 			Dictionary<Edge, V> dictionary = edgeFrom.vertices;
@@ -59,10 +69,15 @@ namespace Collection.Graph {
 
 		public override void RemoveAt(int index) {
 			rwLock.EnterWriteLock();
-			Edge edge = edges[index];
-			edges.RemoveAt(index);
-			for (int i = index; i < edges.Count; i++)
-				edges[i].vertices.Remove(edge);
+			try {
+				Edge edge = edges[index];
+				edges.RemoveAt(index);
+				for (int i = index; i < edges.Count; i++)
+					edges[i].vertices.Remove(edge);
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
 			rwLock.ExitWriteLock();
 		}
 

@@ -37,8 +37,13 @@ namespace Collection.Graph {
 		public V[] GetVerticesFrom(int index) {
 			rwLock.EnterReadLock();
 			V[] vertices = new V[edges.Count];
-			for (int i = 0; i < vertices.Length; i++)
-				vertices[i] = GetVertex(from: index, to: i);
+			try {
+				for (int i = 0; i < vertices.Length; i++)
+					vertices[i] = GetVertex(from: index, to: i);
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
+			}
 			rwLock.ExitReadLock();
 			return vertices;
 		}
@@ -46,8 +51,13 @@ namespace Collection.Graph {
 		public V[] GetVerticesTo(int index) {
 			rwLock.EnterReadLock();
 			V[] vertices = new V[edges.Count];
-			for (int i = 0; i < vertices.Length; i++)
-				vertices[i] = GetVertex(from: i, to: index);
+			try {
+				for (int i = 0; i < vertices.Length; i++)
+					vertices[i] = GetVertex(from: i, to: index);
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
+			}
 			rwLock.ExitReadLock();
 			return vertices;
 		}
@@ -71,14 +81,24 @@ namespace Collection.Graph {
 		public E this[int index] {
 			get {
 				rwLock.EnterReadLock();
-				E edge = edges[index].value;
-				rwLock.ExitReadLock();
-				return edge;
+				try {
+					E edge = edges[index].value;
+					rwLock.ExitReadLock();
+					return edge;
+				} catch (Exception e) {
+					rwLock.ExitReadLock();
+					throw e;
+				}
 			}
 			set {
 				rwLock.EnterWriteLock();
-				RemoveAt(index);
-				Insert(index, value);
+				try {
+					RemoveAt(index);
+					Insert(index, value);
+				} catch (Exception e) {
+					rwLock.ExitWriteLock();
+					throw e;
+				}
 				rwLock.ExitWriteLock();
 			}
 		}
@@ -116,8 +136,13 @@ namespace Collection.Graph {
 
 		public void CopyTo(E[] array, int arrayIndex = 0) {
 			rwLock.EnterReadLock();
-			foreach (Edge edge in edges)
-				array[arrayIndex++] = edge.value;
+			try {
+				foreach (Edge edge in edges)
+					array[arrayIndex++] = edge.value;
+			} catch (Exception e) {
+				rwLock.ExitReadLock();
+				throw e;
+			}
 			rwLock.ExitReadLock();
 		}
 
@@ -131,7 +156,12 @@ namespace Collection.Graph {
 
 		public void Insert(int index, E item) {
 			rwLock.EnterWriteLock();
-			edges.Insert(index, new Edge(item));
+			try {
+				edges.Insert(index, new Edge(item));
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
 			rwLock.ExitWriteLock();
 		}
 
@@ -170,15 +200,25 @@ namespace Collection.Graph {
 
 		public void SetVerticesFrom(int index, V[] vertices, int arrayIndex = 0) {
 			rwLock.EnterWriteLock();
-			for (int i = 0; i < edges.Count; i++)
-				SetVertex(from: index, to: i, vertex: vertices[arrayIndex++]);
+			try {
+				for (int i = 0; i < edges.Count; i++)
+					SetVertex(from: index, to: i, vertex: vertices[arrayIndex++]);
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
 			rwLock.ExitWriteLock();
 		}
 
 		public void SetVerticesTo(int index, V[] vertices, int arrayIndex = 0) {
 			rwLock.EnterWriteLock();
-			for (int i = 0; i < edges.Count; i++)
-				SetVertex(from: i, to: index, vertex: vertices[arrayIndex++]);
+			try {
+				for (int i = 0; i < edges.Count; i++)
+					SetVertex(from: i, to: index, vertex: vertices[arrayIndex++]);
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
 			rwLock.ExitWriteLock();
 		}
 
@@ -197,7 +237,7 @@ namespace Collection.Graph {
 			internal Edge(E value) {
 				this.value = value;
 				this.vertices = new Dictionary<Edge, V>();
-				this.rwLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+				this.rwLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 			}
 
 			~Edge() {
