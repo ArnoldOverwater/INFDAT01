@@ -58,7 +58,7 @@ class App {
 
 	private static void PrintGame(Game game) {
 		foreach (var player in game)
-			Console.WriteLine(player.ScreenName + ": " + player.MatchScore);
+			Console.WriteLine(player);
 	}
 
 }
