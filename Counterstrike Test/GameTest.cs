@@ -67,7 +67,7 @@ namespace Counterstrike_Test {
 
 		[TestMethod()]
 		public void TestMethod2() {
-			game.KillPlayerIndex(killer: 0, victim: 1);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
 			Assert.AreEqual(game.GetVertex(from: 0, to: 1), 1);
 			Assert.AreEqual(game.GetVertex(from: 1, to: 0), 0);
 			Assert.AreEqual(game[0].MatchKills, 1);
@@ -88,8 +88,8 @@ namespace Counterstrike_Test {
 
 		[TestMethod()]
 		public void TestMethod4() {
-			game.KillPlayerIndex(killer: 0, victim: 1);
-			game.KillPlayerIndex(killer: 1, victim: 0);
+			game.KillPlayerIndex(killerIndex: 0, victimIndex: 1);
+			game.KillPlayerIndex(killerIndex: 1, victimIndex: 0);
 			game.KillPlayerIndex(suicider: 0);
 			Player[] array = new Player[2];
 			game.CopyTo(array);
