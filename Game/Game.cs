@@ -20,15 +20,24 @@ namespace Counterstrike {
 		public void AddPlayer(Player player) {
 			if (player == null)
 				throw new NullReferenceException();
+			rwLock.EnterUpgradeableReadLock();
 			if (! Contains(player)) {
 				Add(player);
 				player.EnterMatch();
 			}
+			rwLock.ExitUpgradeableReadLock();
 		}
 
 		public void RemovePlayerIndex(int index) {
-			this[index].EndMatch();
-			RemoveAt(index);
+			rwLock.EnterWriteLock();
+			try {
+				this[index].EndMatch();
+				RemoveAt(index);
+			} catch (Exception e) {
+				rwLock.ExitWriteLock();
+				throw e;
+			}
+			rwLock.ExitWriteLock();
 		}
 
 		public bool RemovePlayer(Player player) {
@@ -41,8 +50,10 @@ namespace Counterstrike {
 		}
 
 		public void EndGame() {
+			rwLock.EnterWriteLock();
 			for (int i = Count - 1; i >= 0; i--)
 				RemovePlayerIndex(i);
+			rwLock.ExitWriteLock();
 		}
 
 		#endregion
@@ -50,19 +61,32 @@ namespace Counterstrike {
 		#region kill methods
 
 		public void KillPlayerIndex(int killerIndex, int victimIndex) {
-			ushort kills = GetVertex(killerIndex, victimIndex);
-			kills++;
-			SetVertex(killerIndex, victimIndex, kills);
-			Player killer = this[killerIndex], victim = this[victimIndex];
-			killer.IncrementKills();
-			victim.IncrementKilled();
-			if (killerIndex == victimIndex)
-				victim.MatchScore -= victim.MatchScore / Count;
-			else {
-				if (victim.MatchScore > killer.MatchScore)
-					victim.MatchScore -= (victim.MatchScore - killer.MatchScore) / Count;
-				killer.MatchScore += victim.MatchScore / Count;
+			rwLock.EnterReadLock();
+			bool closeEdgeLock = false;
+			try {
+				edges[killerIndex].rwLock.EnterUpgradeableReadLock();
+				closeEdgeLock = true;
+				ushort kills = GetVertex(killerIndex, victimIndex);
+				kills++;
+				SetVertex(killerIndex, victimIndex, kills);
+				edges[killerIndex].rwLock.ExitUpgradeableReadLock();
+				Player killer = this[killerIndex], victim = this[victimIndex];
+				killer.IncrementKills();
+				victim.IncrementKilled();
+				if (killerIndex == victimIndex)
+					victim.MatchScore -= victim.MatchScore / Count;
+				else {
+					if (victim.MatchScore > killer.MatchScore)
+						victim.MatchScore -= (victim.MatchScore - killer.MatchScore) / Count;
+					killer.MatchScore += victim.MatchScore / Count;
+				}
+			} catch (Exception e) {
+				if (closeEdgeLock)
+					edges[killerIndex].rwLock.ExitUpgradeableReadLock();
+				rwLock.ExitReadLock();
+				throw e;
 			}
+			rwLock.ExitReadLock();
 		}
 
 		public void KillPlayerIndex(int suicider) {
