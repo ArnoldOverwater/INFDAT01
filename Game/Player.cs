@@ -2,6 +2,7 @@
 
 using System;
 using System.Net;
+using System.Threading;
 
 namespace Counterstrike {
 
@@ -16,6 +17,8 @@ namespace Counterstrike {
 		public IPAddress IPAddress;
 
 		private ulong matches;
+
+		private Random rand;
 
 		#endregion
 
@@ -109,6 +112,7 @@ namespace Counterstrike {
 		public Player(string screenName, IPAddress ipAddress) {
 			this.IPAddress = ipAddress;
 			this.ScreenName = screenName;
+			this.rand = new Random();
 			this.totalKills = 0;
 			this.totalKilled = 0;
 			this.totalScore = 0;
@@ -137,6 +141,31 @@ namespace Counterstrike {
 			totalKills += matchKills;
 			totalKilled += matchKilled;
 			totalScore += matchScore;
+		}
+
+		#endregion
+
+		#region play method for seperate thread
+
+		internal void PlayGame(object obj) {
+			try {
+				Game game = (Game)obj;
+				while (game.State == Game.GameState.InGame) {
+					if (rand.NextDouble() < 0.02) {
+						game.RemovePlayer(this);
+						return;
+					}
+					if (rand.NextDouble() < 0.25) {
+						game.rwLock.EnterReadLock();
+						int victimIndex = rand.Next(game.Count - 1), myIndex = game.IndexOf(this);
+						if (victimIndex == myIndex)
+							victimIndex++;
+						game.KillPlayerIndex(killerIndex: myIndex, victimIndex: victimIndex);
+						game.rwLock.ExitReadLock();
+					}
+					Thread.Sleep(100);
+				}
+			} catch (Exception) {}
 		}
 
 		#endregion

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Timers;
 using Collection.Graph;
 
@@ -12,7 +13,7 @@ namespace Counterstrike {
 
 		#region fields
 
-		private Timer timer;
+		private System.Timers.Timer timer;
 
 		private GameState state;
 
@@ -32,7 +33,7 @@ namespace Counterstrike {
 
 		public Game(ulong time = 60000) : base(0) {
 			this.state = GameState.PreGame;
-			this.timer = new Timer(time);
+			this.timer = new System.Timers.Timer(time);
 			this.timer.Elapsed += TimeOver;
 		}
 
@@ -46,6 +47,8 @@ namespace Counterstrike {
 			rwLock.EnterWriteLock();
 			state = GameState.InGame;
 			timer.Enabled = true;
+			foreach (Player player in this)
+				new Thread(player.PlayGame).Start(this);
 			rwLock.ExitWriteLock();
 		}
 
@@ -56,6 +59,8 @@ namespace Counterstrike {
 			if (! Contains(player)) {
 				Add(player);
 				player.EnterMatch();
+				if (state == GameState.InGame)
+					new Thread(player.PlayGame).Start(this);
 			}
 			rwLock.ExitUpgradeableReadLock();
 		}
