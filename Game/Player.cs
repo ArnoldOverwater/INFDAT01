@@ -163,7 +163,7 @@ namespace Counterstrike {
 						game.KillPlayerIndex(killerIndex: myIndex, victimIndex: victimIndex);
 						game.rwLock.ExitReadLock();
 					}
-					Thread.Sleep(100);
+					Thread.Sleep(rand.Next(100) + 50);
 				}
 			} catch (Exception) {}
 		}
