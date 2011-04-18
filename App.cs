@@ -50,22 +50,22 @@ class App {
 		Console.WriteLine("\nTop scores:");
 		i = 1;
 		var scores = from player in players
-						 orderby player.TotalScore descending
-						 select new {player, rownum = i++};
+						  orderby player.TotalScore descending
+						  select new {player, rownum = i++};
 		foreach (var player in scores)
 			Console.WriteLine(player.rownum + ". " + player.player);
 		Console.WriteLine("\nMost kills:");
 		i = 1;
 		var kills = from player in players
-						 orderby player.TotalKills descending
+						 orderby player.TotalKills descending, player.TotalScore descending
 						 select new {player, rownum = i++};
 		foreach (var player in kills)
 			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKills);
 		Console.WriteLine("\nMost gotten killed:");
 		i = 1;
 		var killed = from player in players
-						 orderby player.TotalKilled descending
-						 select new {player, rownum = i++};
+						  orderby player.TotalKilled descending, player.TotalScore ascending
+						  select new {player, rownum = i++};
 		foreach (var player in killed)
 			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKilled);
 	}
