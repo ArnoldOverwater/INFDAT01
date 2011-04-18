@@ -13,16 +13,8 @@ class App {
 
 	private static int Main(string[] args) {
 		CreatePlayers();
-		Console.WriteLine("Game takes about 3 seconds...");
 		CreateGame();
-		int i;
-		Console.WriteLine("\nPlayers with the highest score:");
-		i = 1;
-		var scores = from player in players
-						 orderby player.TotalScore descending
-						 select new {player, rownum = i++};
-		foreach (var player in scores)
-			Console.WriteLine(player.rownum + ". " + player.player);
+		PrintRankings();
 		// Make sure the output window stays open until a key is hit
 		Console.WriteLine("The end (press any key to exit)");
 		Console.ReadKey();
@@ -44,12 +36,38 @@ class App {
 	}
 
 	private static void CreateGame() {
+		Console.WriteLine("Game takes about 3 seconds...");
 		Game game = new Game(3000);
 		foreach (var player in players)
 			game.AddPlayer(player);
 		game.StartGame();
 		while (game.State == Game.GameState.InGame)
 			Thread.Sleep(1000);
+	}
+
+	private static void PrintRankings() {
+		int i; // Define for multiple uses
+		Console.WriteLine("\nTop scores:");
+		i = 1;
+		var scores = from player in players
+						 orderby player.TotalScore descending
+						 select new {player, rownum = i++};
+		foreach (var player in scores)
+			Console.WriteLine(player.rownum + ". " + player.player);
+		Console.WriteLine("\nMost kills:");
+		i = 1;
+		var kills = from player in players
+						 orderby player.TotalKills descending
+						 select new {player, rownum = i++};
+		foreach (var player in kills)
+			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKills);
+		Console.WriteLine("\nMost gotten killed:");
+		i = 1;
+		var killed = from player in players
+						 orderby player.TotalKilled descending
+						 select new {player, rownum = i++};
+		foreach (var player in kills)
+			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKilled);
 	}
 
 }
