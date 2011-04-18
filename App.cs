@@ -66,7 +66,7 @@ class App {
 		var killed = from player in players
 						 orderby player.TotalKilled descending
 						 select new {player, rownum = i++};
-		foreach (var player in kills)
+		foreach (var player in killed)
 			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKilled);
 	}
 
