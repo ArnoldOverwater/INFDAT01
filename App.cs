@@ -13,9 +13,16 @@ class App {
 
 	private static int Main(string[] args) {
 		CreatePlayers();
+		Console.WriteLine("Game takes about 3 seconds...");
 		CreateGame();
-		foreach (var player in players)
-			Console.WriteLine(player);
+		int i;
+		Console.WriteLine("\nPlayers with the highest score:");
+		i = 1;
+		var scores = from player in players
+						 orderby player.TotalScore descending
+						 select new {player, rownum = i++};
+		foreach (var player in scores)
+			Console.WriteLine(player.rownum + ". " + player.player);
 		// Make sure the output window stays open until a key is hit
 		Console.WriteLine("The end (press any key to exit)");
 		Console.ReadKey();
