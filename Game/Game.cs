@@ -79,10 +79,13 @@ namespace Counterstrike {
 		}
 
 		public bool RemovePlayer(Player player) {
+			rwLock.EnterUpgradeableReadLock();
 			try {
 				RemovePlayerIndex(IndexOf(player));
+				rwLock.ExitUpgradeableReadLock();
 				return true;
 			} catch (Exception) {
+				rwLock.ExitUpgradeableReadLock();
 				return false;
 			}
 		}
