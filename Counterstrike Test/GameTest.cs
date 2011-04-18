@@ -34,27 +34,26 @@ namespace Counterstrike_Test {
 		//
 		//Use ClassInitialize to run code before running the first test in the class
 		[ClassInitialize()]
-		public static void MyClassInitialize(TestContext testContext) {
-			game = new Game();
-		}
+		public static void MyClassInitialize(TestContext testContext) {}
 		//
 		//Use ClassCleanup to run code after all tests in a class have run
 		[ClassCleanup()]
-		public static void MyClassCleanup() {
-			game = null;
-		}
+		public static void MyClassCleanup() {}
 		//
 		//Use TestInitialize to run code before running each test
 		[TestInitialize()]
 		public void MyTestInitialize() {
+			game = new Game(120000);
 			game.AddPlayer(new Player("P1"));
 			game.AddPlayer(new Player("P2"));
+			game.StartGame();
 		}
 		//
 		//Use TestCleanup to run code after each test has run
 		[TestCleanup()]
 		public void MyTestCleanup() {
 			game.Clear();
+			game = null;
 		}
 		//
 		#endregion
@@ -98,6 +97,12 @@ namespace Counterstrike_Test {
 			Assert.AreEqual(array[1].TotalKills, 1ul);
 			Assert.AreEqual(array[0].TotalKilled, 2ul);
 			Assert.AreEqual(array[1].TotalKilled, 1ul);
+		}
+
+		[TestMethod()]
+		public void TestMethod5() {
+			game.RemovePlayerIndex(0);
+			Assert.AreEqual(game.Count, 1);
 		}
 
 	}
