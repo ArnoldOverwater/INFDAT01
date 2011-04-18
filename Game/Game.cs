@@ -3,19 +3,51 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using Collection.Graph;
 
 namespace Counterstrike {
 
 	public class Game : DirectionalGraph<Player, ushort> {
 
+		#region fields
+
+		private Timer timer;
+
+		private GameState state;
+
+		#endregion
+
+		#region properties
+
+		public GameState State {
+			get {
+				return state;
+			}
+		}
+
+		#endregion
+
 		#region constructor
 
-		public Game() : base(0) {}
+		public Game(ulong time = 60000) : base(0) {
+			this.state = GameState.PreGame;
+			this.timer = new Timer(time);
+			this.timer.Elapsed += TimeOver;
+		}
 
 		#endregion
 
 		#region methods
+
+		public void StartGame() {
+			if (state != GameState.PreGame)
+				throw new ApplicationException("Not in pre game");
+			rwLock.EnterWriteLock();
+			state = GameState.InGame;
+			timer.Enabled = true;
+			rwLock.ExitWriteLock();
+		}
 
 		public void AddPlayer(Player player) {
 			if (player == null)
@@ -31,7 +63,8 @@ namespace Counterstrike {
 		public void RemovePlayerIndex(int index) {
 			rwLock.EnterWriteLock();
 			try {
-				this[index].EndMatch();
+				if (state == GameState.InGame)
+					this[index].EndMatch();
 				RemoveAt(index);
 			} catch (Exception e) {
 				rwLock.ExitWriteLock();
@@ -50,9 +83,19 @@ namespace Counterstrike {
 		}
 
 		public void EndGame() {
+			if (state != GameState.InGame)
+				throw new ApplicationException("Not in game");
 			rwLock.EnterWriteLock();
-			for (int i = Count - 1; i >= 0; i--)
-				RemovePlayerIndex(i);
+			state = GameState.PostGame;
+			foreach (Player player in this)
+				player.EndMatch();
+			rwLock.ExitWriteLock();
+		}
+
+		public void TimeOver(object source, ElapsedEventArgs e) {
+			rwLock.EnterWriteLock();
+			timer.Enabled = false;
+			EndGame();
 			rwLock.ExitWriteLock();
 		}
 
@@ -64,6 +107,8 @@ namespace Counterstrike {
 			rwLock.EnterReadLock();
 			bool closeEdgeLock = false;
 			try {
+				if (state != GameState.InGame)
+					throw new ApplicationException("Not in game");
 				edges[killerIndex].rwLock.EnterUpgradeableReadLock();
 				closeEdgeLock = true;
 				ushort kills = GetVertex(killerIndex, victimIndex);
@@ -99,6 +144,18 @@ namespace Counterstrike {
 
 		public void KillPlayer(Player suicider) {
 			KillPlayerIndex(IndexOf(suicider));
+		}
+
+		#endregion
+
+		#region inner class
+
+		public enum GameState : byte {
+
+			PreGame,
+			InGame,
+			PostGame
+
 		}
 
 		#endregion
