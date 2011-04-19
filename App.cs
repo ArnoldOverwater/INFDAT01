@@ -61,10 +61,10 @@ class App {
 						 select new {player, rownum = i++};
 		foreach (var player in kills)
 			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKills);
-		Console.WriteLine("\nMost gotten killed:");
+		Console.WriteLine("\nLeast gotten killed:");
 		i = 1;
 		var killed = from player in players
-						  orderby player.TotalKilled descending, player.TotalScore ascending
+						  orderby player.TotalKilled ascending, player.TotalScore descending
 						  select new {player, rownum = i++};
 		foreach (var player in killed)
 			Console.WriteLine(player.rownum + ". " + player.player.ScreenName + ": " + player.player.TotalKilled);
