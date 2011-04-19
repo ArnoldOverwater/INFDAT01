@@ -6,18 +6,29 @@ using System.Threading;
 
 namespace Counterstrike {
 
+	/// <summary>
+	/// A player who can take part in a Game object.
+	/// Players have stats like scores and kills both for just the current match and in total.
+	/// A Player also support a multi-threaded method to actively play a Game.
+	/// </summary>
 	public class Player {
 
 		#region fields
 
 		#region basic fields
 
+		// Display name.
+		// Can be changed at any time.
 		public string ScreenName;
 
+		// IP address.
+		// This has no real influence on this application.
 		public IPAddress IPAddress;
 
+		// Total number of mathches to tike part in.
 		private ulong matches;
 
+		// Static random field to make sure a set of players do not generate the same numbers.
 		private static Random rand = new Random();
 
 		#endregion
@@ -107,6 +118,10 @@ namespace Counterstrike {
 
 		#region constructors
 
+		// Constructors
+		// They take a screen name and an IP address, both of which are optional.
+		// The default IP address is 127.0.0.1.
+
 		public Player(string screenName = "Player") : this(screenName, new IPAddress(0x7f000001)) {}
 
 		public Player(string screenName, IPAddress ipAddress) {
@@ -120,6 +135,8 @@ namespace Counterstrike {
 		#endregion
 
 		#region incrementing methods
+
+		// Do not call any of these methods as they will be called automaticlly when you call the AddPlayer() or RemovePlayer in the game classes.
 
 		internal void EnterMatch() {
 			matches++;
@@ -146,6 +163,7 @@ namespace Counterstrike {
 
 		#region play method for seperate thread
 
+		// This method is meant to be called by the Game class to simulate playing.
 		internal void PlayGame(object obj) {
 			try {
 				Game game = (Game)obj;
@@ -171,6 +189,7 @@ namespace Counterstrike {
 
 		#region methods from object class
 
+		// Screenname (score)
 		public override string ToString() {
 			return ScreenName + " (" + totalScore + ")";
 		}
