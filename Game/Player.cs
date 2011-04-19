@@ -18,7 +18,7 @@ namespace Counterstrike {
 
 		private ulong matches;
 
-		private Random rand;
+		private static Random rand = new Random();
 
 		#endregion
 
@@ -112,7 +112,6 @@ namespace Counterstrike {
 		public Player(string screenName, IPAddress ipAddress) {
 			this.IPAddress = ipAddress;
 			this.ScreenName = screenName;
-			this.rand = new Random();
 			this.totalKills = 0;
 			this.totalKilled = 0;
 			this.totalScore = 0;
