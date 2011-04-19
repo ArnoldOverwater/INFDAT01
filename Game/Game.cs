@@ -9,12 +9,19 @@ using Collection.Graph;
 
 namespace Counterstrike {
 
+	/// <summary>
+	/// This class represents a game of Counterstrike.
+	/// It is essentially a DirectionalGraph with Player objects as edges and numbers as vertices.
+	/// </summary>
 	public class Game : DirectionalGraph<Player, ushort> {
 
 		#region fields
 
+		// The timer that will countdown from the game start until the game end.
 		private System.Timers.Timer timer;
 
+		// The state of this game.
+		// The game can be in pre game where the game is yet to start, in game where the timer is running and in post game where the timer has elapsed.
 		private GameState state;
 
 		#endregion
@@ -31,6 +38,7 @@ namespace Counterstrike {
 
 		#region constructor
 
+		// Constructor which takes the game time in milliseconds (default = 60 seconds).
 		public Game(ulong time = 60000) : base(0) {
 			this.state = GameState.PreGame;
 			this.timer = new System.Timers.Timer(time);
@@ -41,6 +49,8 @@ namespace Counterstrike {
 
 		#region methods
 
+		// Start the game and the timer.
+		// All players will get their PlayGame() methods started each in a seperate thread.
 		public void StartGame() {
 			if (state != GameState.PreGame)
 				throw new ApplicationException("Not in pre game");
@@ -52,6 +62,8 @@ namespace Counterstrike {
 			rwLock.ExitWriteLock();
 		}
 
+		// Call this method instead of the Add() or Insert() methods.
+		// It will enter the player and start it's PlayGame() method if already in game.
 		public void AddPlayer(Player player) {
 			if (player == null)
 				throw new NullReferenceException();
@@ -64,6 +76,9 @@ namespace Counterstrike {
 			}
 			rwLock.ExitUpgradeableReadLock();
 		}
+
+		// Call these methods instead of the Remove() or RemoveAt() methods.
+		// It will add the current match stats of tese players to their total stats.
 
 		public void RemovePlayerIndex(int index) {
 			rwLock.EnterWriteLock();
@@ -90,6 +105,8 @@ namespace Counterstrike {
 			}
 		}
 
+		// Called when the game ends.
+		// It will update the total stats of all players.
 		public void EndGame() {
 			if (state != GameState.InGame)
 				throw new ApplicationException("Not in game");
@@ -100,6 +117,7 @@ namespace Counterstrike {
 			rwLock.ExitWriteLock();
 		}
 
+		// Event handler for when the time elapses.
 		public void TimeOver(object source, ElapsedEventArgs e) {
 			rwLock.EnterWriteLock();
 			timer.Enabled = false;
@@ -110,6 +128,12 @@ namespace Counterstrike {
 		#endregion
 
 		#region kill methods
+
+		// These methods will update the kills vertices.
+		// It will aso update the player scores based on their current scores.
+		// Players who get killed by a player with a higher score will get a deduction.
+		// The more score the victim has, the more benefitial it is for the killer.
+		// There is also a score penalty for suicide.
 
 		public void KillPlayerIndex(int killerIndex, int victimIndex) {
 			rwLock.EnterReadLock();
@@ -158,6 +182,9 @@ namespace Counterstrike {
 
 		#region inner class
 
+		/// <summary>
+		/// This enum represents one of the 3 states a Game can be in.
+		/// </summary>
 		public enum GameState : byte {
 
 			PreGame,
