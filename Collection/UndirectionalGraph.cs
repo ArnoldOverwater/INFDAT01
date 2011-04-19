@@ -6,6 +6,16 @@ using System.Linq;
 
 namespace Collection.Graph {
 
+	/// <summary>
+	/// A Graph implementation that contains only one undirectional vertex value between two edges.
+	/// This means there can be 1/2 (E ^ 2 + E) unique vertices in total.
+	/// </summary>
+	/// <typeparam name="E">
+	/// Same as Graph
+	/// </typeparam>
+	/// <typeparam name="V">
+	/// Same as Graph
+	/// </typeparam>
 	public class UndirectionalGraph<E, V> : Graph<E, V> {
 
 		#region constructor

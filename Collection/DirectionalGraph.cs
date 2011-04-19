@@ -6,6 +6,17 @@ using System.Linq;
 
 namespace Collection.Graph {
 
+	/// <summary>
+	/// A Graph implementation that contains two vertex value between two edges.
+	/// This means one for each direction.
+	/// This means there can be E ^ 2 unique vertices in total.
+	/// </summary>
+	/// <typeparam name="E">
+	/// Same as Graph
+	/// </typeparam>
+	/// <typeparam name="V">
+	/// Same as Graph
+	/// </typeparam>
 	public class DirectionalGraph<E, V> : Graph<E, V> {
 
 		#region constructor
