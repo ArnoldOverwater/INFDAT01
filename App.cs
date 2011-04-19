@@ -7,10 +7,15 @@ using System.Text;
 using System.Threading;
 using Counterstrike;
 
+/// <summary>
+/// This simulation will create an array of players, let them join a game and then print some rankings.
+/// </summary>
 class App {
 
+	// The array of players that will be usen in all methods.
 	private static Player[] players;
 
+	// Main() method.
 	private static int Main(string[] args) {
 		CreatePlayers();
 		CreateGame();
@@ -21,6 +26,7 @@ class App {
 		return 0; // Application succesful
 	}
 
+	// Create 10 players.
 	private static void CreatePlayers() {
 		players = new Player[10];
 		players[0] = new Player("A.W.F.");
@@ -35,6 +41,9 @@ class App {
 		players[9] = new Player();
 	}
 
+	// Create a game and let everyone join it.
+	// Then wain for it to end.
+	// It should only last about 3 seconds.
 	private static void CreateGame() {
 		Console.WriteLine("Game takes about 3 seconds...");
 		Game game = new Game(3000);
@@ -45,6 +54,10 @@ class App {
 			Thread.Sleep(1000);
 	}
 
+	// Print the following rankings with the use of Linq statements:
+	// * Top score
+	// * Most kills
+	// * Least times gotten killed
 	private static void PrintRankings() {
 		int i; // Define for multiple uses
 		Console.WriteLine("\nTop scores:");
