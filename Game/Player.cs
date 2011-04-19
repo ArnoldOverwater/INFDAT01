@@ -172,7 +172,7 @@ namespace Counterstrike {
 		#region methods from object class
 
 		public override string ToString() {
-			return ScreenName + " (" + matchScore + ")";
+			return ScreenName + " (" + totalScore + ")";
 		}
 
 		#endregion
